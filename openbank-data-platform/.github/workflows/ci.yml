@@ -1,0 +1,56 @@
+name: ci
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  lint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          pip install -r requirements-dev.txt
+          pip install -r services/ingest/requirements.txt
+          pip install -r services/transform/requirements.txt
+          pip install -r services/api/requirements.txt
+      - name: Lint
+        run: ruff check services tests
+      - name: Format
+        run: black --check services tests
+      - name: Unit tests
+        run: pytest tests/unit -q
+
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          pip install -r requirements-dev.txt
+          pip install -r services/ingest/requirements.txt
+          pip install -r services/transform/requirements.txt
+          pip install -r services/api/requirements.txt
+      - name: Integration tests
+        env:
+          TESTCONTAINERS_RYUK_DISABLED: "true"
+        run: pytest tests/integration -q
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build images
+        run: |
+          docker build -t openbank/ingest:ci services/ingest
+          docker build -t openbank/transform:ci services/transform
+          docker build -t openbank/api:ci services/api

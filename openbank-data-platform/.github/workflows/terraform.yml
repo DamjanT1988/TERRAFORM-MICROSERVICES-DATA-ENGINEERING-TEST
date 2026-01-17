@@ -1,0 +1,24 @@
+name: terraform
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - name: Terraform fmt
+        run: terraform -chdir=infra/terraform fmt -recursive -check
+      - name: Terraform validate (local-kind)
+        run: |
+          terraform -chdir=infra/terraform/envs/local-kind init -backend=false
+          terraform -chdir=infra/terraform/envs/local-kind validate
+      - name: Terraform validate (azure)
+        run: |
+          terraform -chdir=infra/terraform/envs/azure init -backend=false
+          terraform -chdir=infra/terraform/envs/azure validate

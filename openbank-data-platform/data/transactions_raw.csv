@@ -1,0 +1,16 @@
+transaction_id,account_id,transaction_timestamp,amount,currency,merchant,merchant_category,country,payment_method,channel,status
+tx_000001,acc_1001,2024-01-02T09:12:34,1250.5,SEK,ICA Kvantum,Grocery,SE,Card,POS,COMPLETED
+tx_000002,acc_1002,2024-01-02T10:45:11,4999.0,SEK,Elgiganten,Electronics,SE,Card,POS,COMPLETED
+tx_000003,acc_1001,2024-01-02T11:02:45,-850.0,SEK,Spotify,Subscription,SE,Card,Online,COMPLETED
+tx_000004,acc_1003,2024-01-02T11:15:09,150000.0,SEK,Binance,Crypto Exchange,MT,BankTransfer,Online,COMPLETED
+tx_000005,acc_1004,2024-01-02T11:18:22,75.0,EUR,McDonalds,Fast Food,DE,Card,POS,COMPLETED
+tx_000006,acc_1001,2024-01-02T11:19:10,1250.5,SEK,ICA Kvantum,Grocery,SE,Card,POS,COMPLETED
+tx_000007,acc_1005,2024-01-02T02:43:55,9200.0,SEK,Unknown Merchant,Unknown,RU,Card,Online,COMPLETED
+tx_000008,acc_1006,2024-01-02T12:30:00,15.99,USD,Netflix,Subscription,US,Card,Online,FAILED
+tx_000009,acc_1002,2024-01-02T12:31:45,30000.0,SEK,Apple,Electronics,SE,Card,Online,COMPLETED
+tx_000010,acc_1007,2024-01-02T03:05:12,45000.0,SEK,Western Union,Money Transfer,UA,Cash,Branch,COMPLETED
+tx_000011,acc_1008,2024-01-02T14:10:55,-12000.0,SEK,Skatteverket,Tax,SE,BankTransfer,Online,COMPLETED
+tx_000012,acc_1009,2024-01-02T15:45:33,99999.99,EUR,Luxury Watches,Jewelry,CH,Card,Online,COMPLETED
+tx_000013,acc_1010,2024-01-02T16:20:44,59.0,SEK,Pressbyrån,Convenience,SE,Card,POS,COMPLETED
+tx_000014,acc_1005,2024-01-02T01:15:09,8700.0,SEK,Unknown Merchant,Unknown,NG,Card,Online,COMPLETED
+tx_000015,acc_1011,2024-01-02T17:05:00,250000.0,SEK,Private Investment,Investment,SE,BankTransfer,Online,PENDING
