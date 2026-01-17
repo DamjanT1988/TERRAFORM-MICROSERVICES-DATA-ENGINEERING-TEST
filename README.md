@@ -1,6 +1,8 @@
-# openbank-data-platform
+# OpenBank Data Platform
 
 A cloud-ready, containerized data engineering platform for financial transaction data. Raw banking transaction data is ingested, validated, transformed into curated datasets, stored in PostgreSQL, and exposed via APIs. The platform runs locally on Kubernetes and is fully provisioned using Terraform, with an Azure-ready infrastructure layer.
+
+This is a portofolio project developed by Damjan with assistance of Co-Pilot. The aim is to learn relevant skills for data engineering and develop skills in microservices, infrastructure as code, and cloud.
 
 ## Problem Statement
 
@@ -120,7 +122,7 @@ infra/terraform/
     azure/
 ```
 
-## Azure Cloud-Ready (V3)
+## Azure Cloud-Ready
 
 The Azure environment is provided as a documented, modular Terraform setup:
 
