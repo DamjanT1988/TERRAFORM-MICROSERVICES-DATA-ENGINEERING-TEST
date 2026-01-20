@@ -3,7 +3,14 @@ import threading
 import time
 from pathlib import Path
 
+import base64
+import io
+import http.client
+import json
+import urllib.request
+import urllib.error
 import pika
+import sys
 from minio import Minio
 from testcontainers.minio import MinioContainer
 from testcontainers.postgres import PostgresContainer
@@ -13,31 +20,48 @@ from alembic.config import Config
 from sqlalchemy import create_engine, text
 
 
-def _wait_for_rabbitmq(host: str, port: int) -> None:
-    deadline = time.time() + 20
+def _wait_for_rabbitmq(host: str, amqp_port: int, mgmt_port: int) -> None:
+    deadline = time.time() + 120
+    auth = base64.b64encode(b"guest:guest").decode("ascii")
     while time.time() < deadline:
         try:
-            connection = pika.BlockingConnection(pika.ConnectionParameters(host=host, port=port))
-            connection.close()
-            return
-        except Exception:
-            time.sleep(0.5)
+            req = urllib.request.Request(
+                f"http://{host}:{mgmt_port}/api/healthchecks/node",
+                headers={"Authorization": f"Basic {auth}"},
+            )
+            with urllib.request.urlopen(req, timeout=2) as response:
+                if response.status == 200:
+                    payload = json.loads(response.read().decode("utf-8"))
+                    if payload.get("status") == "ok":
+                        return
+        except (
+            urllib.error.URLError,
+            urllib.error.HTTPError,
+            TimeoutError,
+            json.JSONDecodeError,
+            http.client.RemoteDisconnected,
+            ConnectionResetError,
+            ConnectionAbortedError,
+        ):
+            time.sleep(1)
     raise RuntimeError("RabbitMQ did not become ready")
 
 
 def test_ingest_transform_api_pipeline() -> None:
     root = Path(__file__).resolve().parents[2]
     csv_path = root / "data" / "transactions_raw.csv"
+    sys.path.append(str(root / "services" / "transform"))
 
     with PostgresContainer("postgres:15") as postgres:
         with MinioContainer("minio/minio:RELEASE.2024-08-17T01-24-54Z") as minio:
-            rabbitmq = DockerContainer("rabbitmq:3.13-management").with_exposed_ports(5672)
+            rabbitmq = DockerContainer("rabbitmq:3.13-management").with_exposed_ports(5672, 15672)
             try:
                 rabbitmq.start()
 
                 rabbit_host = rabbitmq.get_container_host_ip()
                 rabbit_port = int(rabbitmq.get_exposed_port(5672))
-                _wait_for_rabbitmq(rabbit_host, rabbit_port)
+                rabbit_mgmt_port = int(rabbitmq.get_exposed_port(15672))
+                _wait_for_rabbitmq(rabbit_host, rabbit_port, rabbit_mgmt_port)
 
                 minio_host = minio.get_container_host_ip()
                 minio_port = int(minio.get_exposed_port(9000))
@@ -52,6 +76,9 @@ def test_ingest_transform_api_pipeline() -> None:
                 os.environ["TRANSFORM_DATABASE_URL"] = postgres.get_connection_url()
 
                 alembic_cfg = Config(str(root / "services" / "transform" / "alembic.ini"))
+                alembic_cfg.set_main_option(
+                    "script_location", str(root / "services" / "transform" / "migrations")
+                )
                 alembic_cfg.set_main_option("sqlalchemy.url", postgres.get_connection_url())
                 command.upgrade(alembic_cfg, "head")
 
@@ -69,7 +96,7 @@ def test_ingest_transform_api_pipeline() -> None:
                 client.put_object(
                     "raw-transactions",
                     object_key,
-                    data=payload,
+                    data=io.BytesIO(payload),
                     length=len(payload),
                     content_type="text/csv",
                 )
