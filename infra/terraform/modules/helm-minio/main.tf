@@ -4,6 +4,7 @@ resource "helm_release" "minio" {
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "minio"
   version    = "14.8.2"
+  timeout    = 600
 
   set = [
     {

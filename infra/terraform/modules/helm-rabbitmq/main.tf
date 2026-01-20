@@ -3,6 +3,7 @@ resource "helm_release" "rabbitmq" {
   namespace  = var.namespace
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "rabbitmq"
+  timeout    = 600
 
   set = [
     {
