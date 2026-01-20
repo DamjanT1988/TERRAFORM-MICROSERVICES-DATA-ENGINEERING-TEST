@@ -93,8 +93,8 @@ resource "kubernetes_deployment" "transform" {
       }
       spec {
         container {
-          name  = "transform"
-          image = "openbank/transform:${var.image_tag}"
+          name    = "transform"
+          image   = "openbank/transform:${var.image_tag}"
           command = ["sh", "-c"]
           args    = ["alembic upgrade head && python -m app.worker"]
           env {
