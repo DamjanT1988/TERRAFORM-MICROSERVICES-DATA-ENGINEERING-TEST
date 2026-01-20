@@ -57,6 +57,10 @@ CSV / JSON ---> | ingest-service    | ----> MinIO (raw objects)
 3. Example ingestion:
    - Upload CSV: `POST /ingest/csv`
    - JSON POST: `POST /ingest/json`
+   - PowerShell (native):
+     - `Invoke-WebRequest -Uri http://localhost:8001/ingest/csv -Method Post -Form @{ file = Get-Item "data\\transactions_raw.csv" }`
+   - PowerShell (real curl):
+     - `curl.exe -X POST http://localhost:8001/ingest/csv -F "file=@data/transactions_raw.csv"`
 4. Sample data:
    - `data/transactions_raw.csv`
 5. API auth:
