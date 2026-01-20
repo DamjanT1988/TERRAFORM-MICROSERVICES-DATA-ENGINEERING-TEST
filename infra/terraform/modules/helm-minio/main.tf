@@ -3,7 +3,6 @@ resource "helm_release" "minio" {
   namespace  = var.namespace
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "minio"
-  version    = "14.8.2"
   timeout    = 600
 
   set = [
@@ -18,6 +17,14 @@ resource "helm_release" "minio" {
     {
       name  = "persistence.enabled"
       value = "false"
+    },
+    {
+      name  = "image.tag"
+      value = "latest"
+    },
+    {
+      name  = "consoleImage.tag"
+      value = "latest"
     },
   ]
 }

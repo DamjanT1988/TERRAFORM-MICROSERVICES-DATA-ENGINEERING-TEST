@@ -18,5 +18,9 @@ resource "helm_release" "rabbitmq" {
       name  = "persistence.enabled"
       value = "false"
     },
+    {
+      name  = "image.tag"
+      value = "latest"
+    },
   ]
 }
