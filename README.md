@@ -82,7 +82,7 @@ Steps:
    - `docker build -t openbank/ingest:local services/ingest`
    - `docker build -t openbank/transform:local services/transform`
    - `docker build -t openbank/api:local services/api`
-   - `kind load docker-image openbank/ingest:local openbank/transform:local openbank/api:local`
+   - `kind load docker-image openbank/ingest:local openbank/transform:local openbank/api:local --name openbank`
 3. `cd infra/terraform/envs/local-kind`
 4. `terraform init`
 5. `terraform apply`
