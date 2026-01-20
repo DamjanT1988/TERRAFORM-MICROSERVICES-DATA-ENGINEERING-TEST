@@ -77,6 +77,7 @@ The local Terraform environment:
 Steps:
 
 1. Create a local cluster (kind or k3d).
+   - Example (kind on Windows): `kind create cluster --name openbank --image kindest/node:v1.28.15`
 2. Build images and load into the cluster:
    - `docker build -t openbank/ingest:local services/ingest`
    - `docker build -t openbank/transform:local services/transform`
