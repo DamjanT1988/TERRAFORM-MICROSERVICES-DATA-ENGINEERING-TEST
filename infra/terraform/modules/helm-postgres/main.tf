@@ -3,7 +3,6 @@ resource "helm_release" "postgres" {
   namespace  = var.namespace
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "postgresql"
-  version    = "15.5.1"
   timeout    = 600
 
   set = [

@@ -98,6 +98,10 @@ resource "kubernetes_deployment_v1" "transform" {
           command = ["sh", "-c"]
           args    = ["alembic upgrade head && python -m app.worker"]
           env {
+            name  = "PYTHONPATH"
+            value = "/app"
+          }
+          env {
             name  = "TRANSFORM_MINIO_ENDPOINT"
             value = "openbank-minio:9000"
           }
@@ -119,7 +123,7 @@ resource "kubernetes_deployment_v1" "transform" {
           }
           env {
             name  = "TRANSFORM_DATABASE_URL"
-            value = "postgresql+psycopg2://${var.db_username}:${var.db_password}@openbank-postgres:5432/openbank"
+            value = "postgresql+psycopg2://${var.db_username}:${var.db_password}@openbank-postgres-postgresql:5432/openbank"
           }
         }
       }
@@ -158,7 +162,7 @@ resource "kubernetes_deployment_v1" "api" {
           }
           env {
             name  = "API_DATABASE_URL"
-            value = "postgresql+psycopg2://${var.db_username}:${var.db_password}@openbank-postgres:5432/openbank"
+            value = "postgresql+psycopg2://${var.db_username}:${var.db_password}@openbank-postgres-postgresql:5432/openbank"
           }
           env {
             name  = "API_API_KEY"
