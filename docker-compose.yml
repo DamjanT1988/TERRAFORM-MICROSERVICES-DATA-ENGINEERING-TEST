@@ -47,6 +47,7 @@ services:
       TRANSFORM_MINIO_BUCKET: raw-transactions
       TRANSFORM_RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672/
       TRANSFORM_DATABASE_URL: postgresql+psycopg2://postgres:postgres@postgres:5432/openbank
+      PYTHONPATH: /app
     command: ["sh", "-c", "alembic upgrade head && python -m app.worker"]
     depends_on:
       - postgres
