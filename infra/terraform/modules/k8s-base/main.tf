@@ -1,13 +1,13 @@
-resource "kubernetes_namespace" "this" {
+resource "kubernetes_namespace_v1" "this" {
   metadata {
     name = var.namespace
   }
 }
 
-resource "kubernetes_secret" "db" {
+resource "kubernetes_secret_v1" "db" {
   metadata {
     name      = "openbank-db"
-    namespace = kubernetes_namespace.this.metadata[0].name
+    namespace = kubernetes_namespace_v1.this.metadata[0].name
   }
 
   data = {
@@ -18,10 +18,10 @@ resource "kubernetes_secret" "db" {
   type = "Opaque"
 }
 
-resource "kubernetes_secret" "api" {
+resource "kubernetes_secret_v1" "api" {
   metadata {
     name      = "openbank-api"
-    namespace = kubernetes_namespace.this.metadata[0].name
+    namespace = kubernetes_namespace_v1.this.metadata[0].name
   }
 
   data = {
