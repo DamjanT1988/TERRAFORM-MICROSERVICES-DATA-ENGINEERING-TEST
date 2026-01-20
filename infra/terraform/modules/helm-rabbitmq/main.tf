@@ -5,16 +5,18 @@ resource "helm_release" "rabbitmq" {
   chart      = "rabbitmq"
   version    = "15.1.5"
 
-  set {
-    name  = "auth.username"
-    value = "guest"
-  }
-  set {
-    name  = "auth.password"
-    value = "guest"
-  }
-  set {
-    name  = "persistence.enabled"
-    value = "false"
-  }
+  set = [
+    {
+      name  = "auth.username"
+      value = "guest"
+    },
+    {
+      name  = "auth.password"
+      value = "guest"
+    },
+    {
+      name  = "persistence.enabled"
+      value = "false"
+    },
+  ]
 }

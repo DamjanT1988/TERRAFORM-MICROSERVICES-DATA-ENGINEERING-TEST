@@ -5,16 +5,18 @@ resource "helm_release" "minio" {
   chart      = "minio"
   version    = "14.8.2"
 
-  set {
-    name  = "auth.rootUser"
-    value = "minioadmin"
-  }
-  set {
-    name  = "auth.rootPassword"
-    value = "minioadmin"
-  }
-  set {
-    name  = "persistence.enabled"
-    value = "false"
-  }
+  set = [
+    {
+      name  = "auth.rootUser"
+      value = "minioadmin"
+    },
+    {
+      name  = "auth.rootPassword"
+      value = "minioadmin"
+    },
+    {
+      name  = "persistence.enabled"
+      value = "false"
+    },
+  ]
 }
