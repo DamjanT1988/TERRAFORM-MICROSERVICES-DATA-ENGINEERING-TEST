@@ -1,4 +1,4 @@
-resource "kubernetes_deployment" "ingest" {
+resource "kubernetes_deployment_v1" "ingest" {
   metadata {
     name      = "ingest"
     namespace = var.namespace
@@ -53,7 +53,7 @@ resource "kubernetes_deployment" "ingest" {
   }
 }
 
-resource "kubernetes_service" "ingest" {
+resource "kubernetes_service_v1" "ingest" {
   metadata {
     name      = "ingest"
     namespace = var.namespace
@@ -69,7 +69,7 @@ resource "kubernetes_service" "ingest" {
   }
 }
 
-resource "kubernetes_deployment" "transform" {
+resource "kubernetes_deployment_v1" "transform" {
   metadata {
     name      = "transform"
     namespace = var.namespace
@@ -127,7 +127,7 @@ resource "kubernetes_deployment" "transform" {
   }
 }
 
-resource "kubernetes_deployment" "api" {
+resource "kubernetes_deployment_v1" "api" {
   metadata {
     name      = "api"
     namespace = var.namespace
@@ -170,7 +170,7 @@ resource "kubernetes_deployment" "api" {
   }
 }
 
-resource "kubernetes_service" "api" {
+resource "kubernetes_service_v1" "api" {
   metadata {
     name      = "api"
     namespace = var.namespace

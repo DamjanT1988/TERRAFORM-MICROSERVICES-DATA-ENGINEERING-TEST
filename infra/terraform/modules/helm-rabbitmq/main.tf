@@ -3,7 +3,6 @@ resource "helm_release" "rabbitmq" {
   namespace  = var.namespace
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "rabbitmq"
-  version    = "15.1.5"
 
   set = [
     {
